@@ -1,0 +1,29 @@
+- name: copy nginx.repo
+  copy:
+    dest: /etc/yum.repos.d/nginx.repo
+    src: roles/nginx/files/nginx.repo
+
+- name: install nginx
+  yum: name=nginx state=present
+
+- name: start nginx
+  systemd: name=nginx enabled=yes state=started
+
+- name: copy nginx pre.menta.me.conf
+  copy:
+    dest: /etc/nginx/conf.d/pre.menta.me.conf
+    src: roles/nginx/files/pre.menta.me.conf
+    backup: no
+    owner: root
+    group: root
+    mode: 0644
+
+- name: copy nginx.conf
+  copy:
+    dest: /etc/nginx/nginx.conf
+    src: roles/nginx/files/nginx.conf
+    backup: no
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx
